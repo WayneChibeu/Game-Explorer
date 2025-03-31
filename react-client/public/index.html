@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Game List</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    .game {
+      margin-bottom: 20px;
+    }
+    .game img {
+      max-width: 200px;
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <h1>Top Rated Games</h1>
+  <div id="games"></div>
+
+  <script>
+    // Fetch the game data from the API
+    fetch("/api/games")
+      .then((response) => response.json())
+      .then((games) => {
+        const gamesContainer = document.getElementById("games");
+        games.forEach((game) => {
+          const gameDiv = document.createElement("div");
+          gameDiv.classList.add("game");
+          gameDiv.innerHTML = `
+            <h2>${game.name}</h2>
+            <p>Released: ${game.released || "TBA"}</p>
+            <p>Rating: ${game.rating}</p>
+            <img src="${game.background_image}" alt="${game.name}">
+          `;
+          gamesContainer.appendChild(gameDiv);
+        });
+      })
+      .catch((error) => {
+        console.error("Error fetching games:", error);
+      });
+  </script>
+</body>
+</html>

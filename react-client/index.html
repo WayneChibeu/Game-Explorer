@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Game Explorer</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #121212;
+      color: #ffffff;
+      transition: background-color 0.5s ease, color 0.5s ease; /* Smooth transition */
+    }
+
+    header {
+      background: linear-gradient(90deg, #007bff, #0056b3);
+      background-size: 200% 200%;
+      animation: gradientAnimation 5s ease infinite;
+      padding: 20px;
+      text-align: center;
+      border-bottom: 1px solid #333;
+    }
+
+    @keyframes gradientAnimation {
+      0% {
+        background-position: 0% 50%;
+      }
+      50% {
+        background-position: 100% 50%;
+      }
+      100% {
+        background-position: 0% 50%;
+      }
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 2.5rem;
+      color: #ffffff;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    }
+
+    .search-container {
+      text-align: center;
+      margin: 20px 0;
+    }
+
+    .search-container input {
+      padding: 10px;
+      width: 400px;
+      border: 1px solid #444;
+      border-radius: 5px;
+      font-size: 1rem;
+      background-color: #1f1f1f;
+      color: #fff;
+      transition: box-shadow 0.3s;
+    }
+
+    .search-container input:focus {
+      box-shadow: 0 0 10px #007bff;
+      outline: none;
+    }
+
+    .search-container button {
+      padding: 10px 15px;
+      background: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 1rem;
+      margin-left: 10px;
+      transition: background-color 0.3s, transform 0.2s;
+    }
+
+    .search-container button:hover {
+      background: #0056b3;
+      transform: scale(1.05);
+    }
+
+    .games-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      padding: 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+      min-height: 600px; /* Ensure the container has a minimum height */
+    }
+
+    .game {
+      background: #1f1f1f;
+      border: 1px solid #333;
+      border-radius: 8px;
+      padding: 15px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+      text-align: center;
+      transition: transform 0.3s, box-shadow 0.3s;
+      position: relative;
+      overflow: hidden;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeIn 0.5s ease-in-out forwards;
+    }
+
+    .game:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.7);
+    }
+
+    .game img {
+      max-width: 100%;
+      border-radius: 8px;
+      margin-bottom: 10px;
+      transition: transform 0.3s;
+    }
+
+    .game:hover img {
+      transform: scale(1.1);
+    }
+
+    .game h2 {
+      font-size: 1.2rem;
+      margin: 10px 0;
+      color: #ffffff;
+    }
+
+    .game p {
+      font-size: 0.9rem;
+      color: #bbbbbb;
+    }
+
+    .game::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 60%, rgba(0, 0, 0, 0.8));
+      opacity: 0;
+      transition: opacity 0.3s;
+      z-index: 1; /* Ensure the overlay is below the button */
+    }
+
+    .game:hover::after {
+      opacity: 1;
+    }
+
+    .favorite-btn {
+      position: relative;
+      z-index: 2; /* Ensure the button is above the overlay */
+    }
+
+    .remove-favorite-btn {
+      position: relative;
+      z-index: 2; /* Ensure the button is above the overlay */
+    }
+
+    .pagination {
+      text-align: center;
+      margin: 20px 0;
+    }
+
+    .pagination button {
+      background: #007bff;
+      color: #fff;
+      border: none;
+      padding: 10px 15px;
+      margin: 0 5px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s, transform 0.2s;
+    }
+
+    .pagination button:hover {
+      background: #0056b3;
+      transform: scale(1.05);
+    }
+
+    .pagination button:disabled {
+      background: #444;
+      cursor: not-allowed;
+    }
+
+    .loading {
+      text-align: center;
+      font-size: 1.2rem;
+      color: #bbbbbb;
+    }
+
+    .loading::after {
+      content: '';
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 3px solid #007bff;
+      border-top: 3px solid transparent;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-left: 10px;
+    }
+
+    @keyframes spin {
+      from {
+        transform: rotate(0deg);
+      }
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    @keyframes fadeIn {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 20px;
+      padding: 10px;
+      background-color: #1f1f1f;
+      color: #bbb;
+    }
+
+    footer a {
+      color: #007bff;
+      text-decoration: none;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      header h1 {
+        font-size: 2rem;
+      }
+
+      .search-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .search-container input {
+        width: 90%; /* Full width on smaller screens */
+        margin-bottom: 10px;
+      }
+
+      .search-container button {
+        width: 90%; /* Full width on smaller screens */
+      }
+
+      .games-container {
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Smaller cards */
+        padding: 10px;
+      }
+
+      .game {
+        padding: 10px;
+      }
+
+      .game h2 {
+        font-size: 1rem;
+      }
+
+      .game p {
+        font-size: 0.8rem;
+      }
+
+      footer {
+        font-size: 0.9rem;
+      }
+
+      #theme-toggle {
+        top: 70px; /* Move the button below the header */
+        right: 10px; /* Adjust spacing */
+      }
+    }
+
+    @media (max-width: 480px) {
+      header h1 {
+        font-size: 1.5rem; /* Reduce font size for smaller screens */
+        padding: 10px; /* Add padding to prevent cut-off */
+      }
+
+      .search-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 10px; /* Add padding for spacing */
+      }
+
+      .search-container input,
+      .search-container button {
+        width: 100%; /* Full width on very small screens */
+        margin-bottom: 10px; /* Add spacing between input and button */
+      }
+
+      .games-container {
+        grid-template-columns: 1fr; /* Single column layout */
+        padding: 10px; /* Reduce padding */
+      }
+
+      .game img {
+        max-width: 100%; /* Ensure images fit within the card */
+      }
+
+      .pagination button {
+        padding: 8px 12px; /* Smaller buttons */
+      }
+
+      #theme-toggle {
+        top: 80px; /* Further adjust for very small screens */
+        right: 10px;
+        font-size: 0.9rem; /* Reduce font size */
+        padding: 5px 8px; /* Adjust padding */
+      }
+    }
+
+    .skeleton {
+      background: linear-gradient(90deg, #e0e0e0 25%, #f0f0f0 50%, #e0e0e0 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.5s infinite;
+    }
+
+    @keyframes shimmer {
+      from {
+        background-position: -200% 0;
+      }
+      to {
+        background-position: 200% 0;
+      }
+    }
+
+    .skeleton-card {
+      width: 100%;
+      height: 300px; /* Adjust height to match your game card */
+      border-radius: 8px;
+      margin-bottom: 10px;
+    }
+
+    /* Light Mode Styles */
+    body.light-mode {
+      background-color: #ffffff;
+      color: #000000;
+    }
+
+    body.light-mode header {
+      background-color: #f4f4f4;
+      border-bottom: 1px solid #ddd;
+    }
+
+    body.light-mode header h1 {
+      color: #333333;
+    }
+
+    body.light-mode .search-container input {
+      background-color: #f9f9f9;
+      color: #000000;
+      border: 1px solid #ccc;
+    }
+
+    body.light-mode .search-container button {
+      background: #007bff;
+      color: #ffffff;
+    }
+
+    body.light-mode .game {
+      background: #f9f9f9;
+      border: 1px solid #ddd;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    body.light-mode .game h2 {
+      color: #333333;
+    }
+
+    body.light-mode .game p {
+      color: #666666;
+    }
+
+    body.light-mode .pagination button {
+      background: #007bff;
+      color: #ffffff;
+    }
+
+    body.light-mode footer {
+      background-color: #f4f4f4;
+      color: #666666;
+    }
+
+    body.light-mode footer a {
+      color: #007bff;
+    }
+
+    .spinner {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100px;
+    }
+
+    .spinner::after {
+      content: '';
+      width: 40px;
+      height: 40px;
+      border: 4px solid #007bff;
+      border-top: 4px solid transparent;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      from {
+        transform: rotate(0deg);
+      }
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    #back-to-top {
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    #back-to-top.show {
+      opacity: 1;
+    }
+
+    #game-modal {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: #1f1f1f;
+      color: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      z-index: 1000;
+      max-width: 90%;
+      max-height: 90%;
+      overflow-y: auto; /* Enable scrolling for large content */
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.7);
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>
+      <img src="https://cdn-icons-png.flaticon.com/512/871/871366.png" alt="Game Explorer Logo" style="vertical-align: middle; border-radius: 50%; margin-right: 10px; width: 40px; height: 40px;">
+      Game Explorer
+    </h1>
+  </header>
+  <button id="theme-toggle" style="position: absolute; top: 20px; right: 20px; padding: 5px 10px; background: #007bff; color: #fff; border: none; border-radius: 5px; cursor: pointer;">Light Mode</button>
+  <div class="search-container">
+    <input type="text" id="search" placeholder="Search for a game...">
+    <button id="search-btn">Search</button>
+  </div>
+  <button id="view-favorites" style="margin: 20px; padding: 10px 15px; background: #007bff; color: #fff; border: none; border-radius: 5px; cursor: pointer;">View Favorites</button>
+  <button id="back-to-main" style="display: none; margin: 20px; padding: 10px 15px; background: #007bff; color: #fff; border: none; border-radius: 5px; cursor: pointer;">Back to Main</button>
+  <div class="loading" id="loading" style="display: none;">Loading games...</div>
+  <div id="games" class="games-container"></div>
+  <div class="pagination">
+    <button id="prev" disabled>Previous</button>
+    <span id="page-indicator">Page 1</span>
+    <button id="next">Next</button>
+  </div>
+  <button id="back-to-top" style="display: none; position: fixed; bottom: 20px; right: 20px; padding: 10px 15px; background: #007bff; color: #fff; border: none; border-radius: 5px; cursor: pointer; font-size: 1rem;">↑ Top</button>
+  <div id="game-modal" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #1f1f1f; color: #fff; padding: 20px; border-radius: 8px; z-index: 1000;">
+    <button id="close-modal" style="position: absolute; top: 10px; right: 10px; background: #007bff; color: #fff; border: none; border-radius: 5px; cursor: pointer;">Close</button>
+    <div id="modal-content"></div>
+  </div>
+  <div id="modal-overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); z-index: 999;"></div>
+  <footer>
+    <p>
+      Data and images provided by 
+      <a href="https://rawg.io/" target="_blank">RAWG</a>.
+    </p>
+  </footer>
+  <script>
+    let currentPage = 1;
+    let isViewingFavorites = false; // Flag to track if the user is viewing favorites
+
+    function fetchGames(page = 1, searchQuery = "") {
+      return new Promise((resolve, reject) => {
+        const favorites = JSON.parse(localStorage.getItem("favorites")) || []; // Retrieve favorites from localStorage
+        const url = searchQuery
+          ? `/api/games?search=${searchQuery}&page=${page}`
+          : `/api/games?page=${page}`;
+
+        const loadingIndicator = document.getElementById("loading");
+        loadingIndicator.style.display = "block"; // Show loading indicator
+
+        const gamesContainer = document.getElementById("games");
+        if (page === 1) {
+          gamesContainer.innerHTML = ""; // Clear games only for the first page
+        }
+
+        fetch(url)
+          .then((response) => response.json())
+          .then((games) => {
+            console.log("API Response:", games); // Log the API response
+            if (games.length === 0) {
+              gamesContainer.innerHTML = "<p>No games found. Try a different search query.</p>";
+              loadingIndicator.style.display = "none";
+              resolve();
+              return;
+            }
+
+            games.forEach((game) => {
+              const gameDiv = document.createElement("div");
+              gameDiv.classList.add("game");
+              gameDiv.innerHTML = `
+                <img src="${game.background_image}" alt="${game.name}">
+                <h2>${game.name}</h2>
+                <p>Released: ${game.released || "TBA"}</p>
+                <p>Rating: ${game.rating}</p>
+                <p>Genres: ${
+                  game.genres && game.genres.length > 0
+                    ? game.genres.map((genre) => genre.name).join(", ")
+                    : "N/A"
+                }</p>
+                <p>Platforms: ${
+                  game.platforms && game.platforms.length > 0
+                    ? game.platforms.map((platform) => platform.platform.name).join(", ")
+                    : "N/A"
+                }</p>
+                <button class="favorite-btn" style="background: ${
+                  favorites.includes(game.id) ? "#ff0000" : "#007bff"
+                }; color: #fff; border: none; border-radius: 5px; cursor: pointer;">
+                  ${favorites.includes(game.id) ? "Unfavorite" : "Favorite"}
+                </button>
+              `;
+
+              // Add favorite button logic
+              gameDiv.querySelector(".favorite-btn").addEventListener("click", (event) => {
+                event.stopPropagation(); // Prevent the click from triggering the modal
+
+                const existingFavorite = favorites.find((fav) => fav.id === game.id);
+
+                if (existingFavorite) {
+                  // Remove the game from favorites
+                  const updatedFavorites = favorites.filter((fav) => fav.id !== game.id);
+                  localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
+                  event.target.textContent = "Favorite";
+                  event.target.style.background = "#007bff";
+                } else {
+                  // Add the game to favorites
+                  favorites.push(game);
+                  localStorage.setItem("favorites", JSON.stringify(favorites));
+                  event.target.textContent = "Unfavorite";
+                  event.target.style.background = "#ff0000";
+                }
+              });
+
+              // Add click event to open the modal
+              gameDiv.addEventListener("click", () => {
+                const modal = document.getElementById("game-modal");
+                const overlay = document.getElementById("modal-overlay");
+                const modalContent = document.getElementById("modal-content");
+
+                modalContent.innerHTML = `
+                  <h2>${game.name || "Unknown Game"}</h2>
+                  <img src="${game.background_image || "placeholder.jpg"}" alt="${game.name || "Unknown Game"}" style="width: 100%; border-radius: 8px;">
+                  <p>Released: ${game.released || "TBA"}</p>
+                  <p>Rating: ${game.rating || "N/A"}</p>
+                  <p>Genres: ${
+                    game.genres && game.genres.length > 0
+                      ? game.genres.map((genre) => genre.name).join(", ")
+                      : "N/A"
+                  }</p>
+                  <p>Platforms: ${
+                    game.platforms && game.platforms.length > 0
+                      ? game.platforms.map((platform) => platform.platform.name).join(", ")
+                      : "N/A"
+                  }</p>
+                `;
+
+                modal.style.display = "block";
+                overlay.style.display = "block";
+              });
+
+              gamesContainer.appendChild(gameDiv);
+            });
+
+            // Update the page indicator
+            document.getElementById("page-indicator").textContent = `Page ${page}`;
+
+            loadingIndicator.style.display = "none"; // Hide the loading indicator
+            resolve(); // Resolve the promise after the fetch is complete
+          })
+          .catch((error) => {
+            console.error("Error fetching games:", error);
+            loadingIndicator.style.display = "none"; // Hide the loading indicator
+            reject(error); // Reject the promise if there's an error
+          });
+      });
+    }
+
+    document.getElementById("close-modal").addEventListener("click", () => {
+      document.getElementById("game-modal").style.display = "none";
+      document.getElementById("modal-overlay").style.display = "none";
+    });
+
+    // Event listeners for pagination buttons
+    document.getElementById("prev").addEventListener("click", () => {
+      if (currentPage > 1) fetchGames(currentPage - 1);
+    });
+
+    document.getElementById("next").addEventListener("click", () => {
+      fetchGames(currentPage + 1);
+    });
+
+    // Event listener for search button
+    document.getElementById("search-btn").addEventListener("click", () => {
+      const searchQuery = document.getElementById("search").value.trim();
+      if (searchQuery) {
+        fetchGames(1, searchQuery); // Fetch games based on search query
+      }
+    });
+
+    const backToTopButton = document.getElementById("back-to-top");
+
+    window.addEventListener("scroll", () => {
+      if (window.scrollY > 300) {
+        backToTopButton.classList.add("show");
+      } else {
+        backToTopButton.classList.remove("show");
+      }
+    });
+
+    backToTopButton.addEventListener("click", () => {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+
+    const themeToggle = document.getElementById("theme-toggle");
+    let isDarkMode = true;
+
+    themeToggle.addEventListener("click", () => {
+      const body = document.body;
+      if (isDarkMode) {
+        body.classList.add("light-mode");
+        themeToggle.textContent = "Dark Mode";
+      } else {
+        body.classList.remove("light-mode");
+        themeToggle.textContent = "Light Mode";
+      }
+      isDarkMode = !isDarkMode;
+    });
+
+    let isLoading = false;
+
+    window.addEventListener("scroll", () => {
+      if (
+        !isViewingFavorites && // Only trigger infinite scroll on the main game list
+        window.innerHeight + window.scrollY >= document.body.offsetHeight - 100 &&
+        !isLoading
+      ) {
+        isLoading = true; // Prevent multiple fetches
+        currentPage++;
+        fetchGames(currentPage).then(() => {
+          isLoading = false; // Allow the next fetch after the current one is complete
+        });
+      }
+    });
+
+    document.getElementById("view-favorites").addEventListener("click", () => {
+      isViewingFavorites = true; // Set the flag to true
+      const favorites = JSON.parse(localStorage.getItem("favorites")) || [];
+      const gamesContainer = document.getElementById("games");
+      const backToMainButton = document.getElementById("back-to-main");
+
+      if (favorites.length === 0) {
+        gamesContainer.innerHTML = "<p>No favorite games yet.</p>";
+        backToMainButton.style.display = "block"; // Show the "Back" button
+        return;
+      }
+
+      gamesContainer.innerHTML = ""; // Clear the games container
+      backToMainButton.style.display = "block"; // Show the "Back" button
+
+      favorites.forEach((game) => {
+        const gameDiv = document.createElement("div");
+        gameDiv.classList.add("game");
+        gameDiv.innerHTML = `
+          <img src="${game.background_image}" alt="${game.name}">
+          <h2>${game.name}</h2>
+          <p>Released: ${game.released || "TBA"}</p>
+          <p>Rating: ${game.rating}</p>
+          <p>Genres: ${
+            game.genres && game.genres.length > 0
+              ? game.genres.map((genre) => genre.name).join(", ")
+              : "N/A"
+          }</p>
+          <p>Platforms: ${
+            game.platforms && game.platforms.length > 0
+              ? game.platforms.map((platform) => platform.platform.name).join(", ")
+              : "N/A"
+          }</p>
+          <button class="remove-favorite-btn" style="background: #ff0000; color: #fff; border: none; border-radius: 5px; cursor: pointer; margin-top: 10px;">
+            Remove from Favorites
+          </button>
+        `;
+
+        // Add logic to remove the game from favorites
+        gameDiv.querySelector(".remove-favorite-btn").addEventListener("click", () => {
+          // Update the favorites array in memory
+          const updatedFavorites = favorites.filter((fav) => fav.id !== game.id);
+
+          // Update localStorage with the new favorites list
+          localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
+
+          // Update the favorites array in memory
+          favorites.length = 0; // Clear the array
+          favorites.push(...updatedFavorites); // Add the updated favorites back
+
+          // Remove the game card from the DOM
+          gameDiv.remove();
+
+          // If no favorites remain, automatically go back to the main page
+          if (updatedFavorites.length === 0) {
+            isViewingFavorites = false; // Set the flag to false
+            const gamesContainer = document.getElementById("games");
+            const backToMainButton = document.getElementById("back-to-main");
+
+            backToMainButton.style.display = "none"; // Hide the "Back" button
+            gamesContainer.innerHTML = "<p>Loading games...</p>";
+
+            // Reset infinite scroll state
+            isLoading = false; // Reset the loading flag
+            currentPage = 1; // Reset to the first page
+            fetchGames(currentPage); // Reload the main game list
+          }
+        });
+
+        gamesContainer.appendChild(gameDiv);
+      });
+    });
+
+    // Add logic for the "Back" button
+    document.getElementById("back-to-main").addEventListener("click", () => {
+      isViewingFavorites = false; // Set the flag to false
+      const gamesContainer = document.getElementById("games");
+      const backToMainButton = document.getElementById("back-to-main");
+
+      backToMainButton.style.display = "none"; // Hide the "Back" button
+      gamesContainer.innerHTML = "<p>Loading games...</p>";
+      fetchGames(currentPage); // Reload the main game list
+    });
+
+    // Initial fetch
+    fetchGames();
+  </script>
+</body>
+</html>

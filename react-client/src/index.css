@@ -1,0 +1,52 @@
+/* App.css */
+body {
+  background-color: #f4f4f4; /* Light gray background */
+  font-family: 'Roboto', sans-serif; /* Font family */
+}
+
+h1 {
+  color: #007bff; /* Color for your title */
+}
+
+ul {
+  list-style-type: none; /* Remove default list bullets */
+  padding: 0;
+}
+
+li {
+  background-color: #fff;
+  margin: 10px 0;
+  padding: 10px;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+li:hover {
+  background-color: #f1f1f1;
+}
+
+div {
+  padding: 20px;
+}
+
+ul {
+  margin-top: 20px;
+}
+
+h1 {
+  margin-bottom: 20px;
+}
+
+li {
+  background-color: #fff;
+  margin: 10px 0;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+
+li:hover {
+  transform: translateY(-5px);
+  background-color: #f1f1f1;
+}
