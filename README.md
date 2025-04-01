@@ -44,24 +44,20 @@ Now, open your browser and go to http://localhost:5000 to view the app!
 
 **Usage**
 
-**Search for Games:** Use the search bar to find games by name, platform, or genre.
+1. ***Search for Games:*** Use the search bar to find games by name, platform, or genre.
 
-**View Ratings:** Each game displays its rating along with reviews and additional details.
+2. ***View Ratings:*** Each game displays its rating along with reviews and additional details.
 
-**Add to Favorites:** Click the "Favorite" icon to add games to your favorites list.
+3. ***Add to Favorites:*** Click the "Favorite" icon to add games to your favorites list.
 
-**Mobile-Friendly:** The design is fully responsive, so you can access the platform on any device.
+4. ***Mobile-Friendly:*** The design is fully responsive, so you can access the platform on any device.
 
 **Contributing**
 
 Contributions are welcome! Feel free to fork the repository, make your changes, and submit a pull request.
 
-**Fork the repository**
-
-Create your feature branch (git checkout -b feature/your-feature)
-
-Commit your changes (git commit -m 'Add new feature')
-
-Push to your branch (git push origin feature/your-feature)
-
-Open a pull request
+1. Fork the repository**
+2. Create your feature branch (git checkout -b feature/your-feature)
+3. Commit your changes (git commit -m 'Add new feature')
+4. Push to your branch (git push origin feature/your-feature)
+5. Open a pull request
