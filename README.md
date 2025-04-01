@@ -1,4 +1,4 @@
-***Game Ratings Dashboard***
+**Game Ratings Dashboard**
 
 Welcome to the Game Ratings Dashboard! This platform allows gamers to explore ratings of various games, add them to their favorites, and search for games based on their preferences. With an intuitive interface and interactive features, it's your go-to tool for tracking game ratings and discovering new favorites!
 
