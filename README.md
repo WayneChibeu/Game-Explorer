@@ -1,6 +1,6 @@
-**Game Ratings Dashboard**
+**Game Explorer Dashboard**
 
-Welcome to the Game Ratings Dashboard! This platform allows gamers to explore ratings of various games, add them to their favorites, and search for games based on their preferences. With an intuitive interface and interactive features, it's your go-to tool for tracking game ratings and discovering new favorites!
+Welcome to the Game Explorer Dashboard! This platform allows gamers to explore ratings of various games, add them to their favorites, and search for games based on their preferences. With an intuitive interface and interactive features, it's your go-to tool for tracking game ratings and discovering new favorites!
 
 **Features**
 
@@ -26,7 +26,7 @@ Deployment: Netlify, Heroku (based on your setup)
 
 **1. Clone the repository:**
 
-git clone https://github.com/WayneChibeu/game-ratings-dashboard.git
+git clone https://github.com/
 
 **2.Navigate to the project folder:**
 
