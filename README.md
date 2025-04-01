@@ -4,13 +4,13 @@ Welcome to the Game Ratings Dashboard! This platform allows gamers to explore ra
 
 **Features**
 
-Search Games: Find games by name, genre, or platform.
+***Search Games:*** Find games by name, genre, or platform.
 
-Game Ratings: View the ratings and reviews for each game from various sources.
+***Game Ratings:*** View the ratings and reviews for each game from various sources.
 
-Add to Favorites: Keep track of your favorite games for easy access.
+***Add to Favorites:*** Keep track of your favorite games for easy access.
 
-Responsive Design: Access the platform on mobile, tablet, and desktop devices.
+***Responsive Design:*** Access the platform on mobile, tablet, and desktop devices.
 
 **Technologies Used**
 
