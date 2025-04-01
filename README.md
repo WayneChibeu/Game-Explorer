@@ -26,30 +26,18 @@ Deployment: Netlify, Heroku (based on your setup)
 
 **1. Clone the repository:**
 
-bash
-Copy
-Edit
 git clone https://github.com/WayneChibeu/game-ratings-dashboard.git
 
 **2.Navigate to the project folder:**
 
-bash
-Copy
-Edit
 cd game-ratings-dashboard
 
 **3. Install dependencies:**
 
-bash
-Copy
-Edit
 npm install
 
 **4. Start the development server:**
 
-bash
-Copy
-Edit
 npm start
 
 Now, open your browser and go to http://localhost:5000 to view the app!
