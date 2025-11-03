@@ -56,7 +56,7 @@ Now, open your browser and go to http://localhost:5000 to view the app!
 
 Contributions are welcome! Feel free to fork the repository, make your changes, and submit a pull request.
 
-1. Fork the repository**
+1. Fork the repository
 2. Create your feature branch (git checkout -b feature/your-feature)
 3. Commit your changes (git commit -m 'Add new feature')
 4. Push to your branch (git push origin feature/your-feature)
