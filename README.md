@@ -30,7 +30,7 @@ git clone https://github.com/WayneChibeu/Game-Explorer.git
 
 **2.Navigate to the project folder:**
 
-cd game-ratings-dashboard
+cd Game-Explorer
 
 **3. Install dependencies:**
 
