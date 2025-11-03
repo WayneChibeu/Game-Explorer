@@ -26,7 +26,7 @@ Deployment: Netlify, Heroku (based on your setup)
 
 **1. Clone the repository:**
 
-git clone https://github.com/https://github.com/WayneChibeu/Game-Explorer.git
+git clone https://github.com/WayneChibeu/Game-Explorer.git
 
 **2.Navigate to the project folder:**
 
